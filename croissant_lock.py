@@ -4,7 +4,7 @@ from PIL import Image, ImageTk
 import os
 
 # --- CONFIGURATION ---
-IMAGE_FILE = "/home/traomeli/.config/autostart/img.jpg" # Remplace par le nom de ton image sedape
+IMAGE_FILE = "img.jpg" # Remplace par le nom de ton image sedape
 SECRET_KEY = "<Control-Alt-Key-x>" 
 # ---------------------
 

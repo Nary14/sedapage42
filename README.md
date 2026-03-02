@@ -20,12 +20,14 @@ Since the script uses the Python Imaging Library (PIL), you need to install `Pil
 pip3 install --user Pillow
 ```
 
+⚠️ **Important** : Assurez-vous que le fichier image (`img.jpg` par défaut) se trouve dans le même répertoire que le script `croissant_lock.py`. Si vous utilisez un autre chemin, modifiez la variable `IMAGE_PATH` dans le script pour utiliser un **chemin relatif** ou un chemin absolu correct.
+
 ### Installation & Deployment
 
 To deploy the tool quickly on a workstation, you can use the following one-liner:
 
 ```bash
-git clone https://github.com/Nary14/croissantage42.git && python3 croissant_lock.py
+git clone https://github.com/Nary14/croissantage42.git && cd && python3 croissant_lock.py
 ```
 
 ### Configuration
@@ -70,15 +72,42 @@ For production security:
 
 ## Troubleshooting
 
-### The lockscreen won't unlock
-- Ensure you're pressing the exact key combination specified in `SECRET_KEY`
-- Check your keyboard layout (keycodes may vary)
-- Verify the script is still running
+### Erreur : `[Errno 2] No such file or directory: '..../img.jpg'`
 
-### Display issues
-- Ensure Pillow is properly installed: `pip3 list | grep Pillow`
-- Check that your display supports full-screen mode
-- Try setting the image path to an absolute path instead of relative
+**Cause** : Le script ne trouve pas le fichier image.
+
+**Solution** :
+1. Vérifiez que le fichier `img.jpg` existe bien dans le répertoire du projet
+2. Si vous utilisez une autre image, modifiez la variable `IMAGE_PATH` dans le script :
+   ```python
+   IMAGE_PATH = "img.jpg"  # Chemin relatif (recommandé)
+   # OU
+   IMAGE_PATH = os.path.join(os.path.dirname(__file__), "img.jpg")  # Chemin absolu dynamique
+   ```
+3. Assurez-vous de lancer le script depuis le répertoire du projet :
+   ```bash
+   cd croissantage42
+   python3 croissant_lock.py
+   ```
+
+### Erreur : `TclError: can't invoke "bind" command: application has been destroyed`
+
+**Cause** : L'application Tkinter se ferme à cause d'une erreur (souvent liée à l'image manquante).
+
+**Solution** :
+1. Résolvez d'abord l'erreur du fichier image (voir ci-dessus)
+2. Vérifiez que `python3-tk` est bien installé (voir section Prerequisites)
+3. Testez avec : `python3 -m tkinter` (une fenêtre devrait s'ouvrir)
+
+### Le lockscreen ne se déverrouille pas
+- Assurez-vous d'utiliser la combinaison exacte définie dans `SECRET_KEY`
+- Vérifiez votre disposition de clavier (les codes peuvent varier)
+- Vérifiez que le script est toujours en cours d'exécution
+
+### Problèmes d'affichage
+- Vérifiez que Pillow est bien installé : `pip3 list | grep Pillow`
+- Vérifiez que votre écran supporte le mode plein écran
+- Si l'image ne s'affiche pas correctement, vérifiez son format (JPG ou PNG recommandés)
 
 ## Contributing
 
