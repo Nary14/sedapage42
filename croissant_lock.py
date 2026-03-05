@@ -22,7 +22,7 @@ class SedapeLock:
 
         # 2. TOUCHE DE SECOURS PERSONNALISÉE : Ctrl + Alt + Tab + F8
         # Note : On bind sur le root pour capturer partout
-        self.root.bind("<Control-Alt-Tab-F8>", lambda e: self.quit_lock())
+        self.root.bind("<Control-Alt-F8>", lambda e: self.quit_lock())
         
         # Optionnel : On garde Echap pour tes tests rapides (tu peux supprimer la ligne après)
         self.root.bind("<Escape>", lambda e: self.quit_lock())
