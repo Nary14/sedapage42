@@ -1,83 +1,124 @@
-*This project has been created as part of the 42 curriculum by traomeli.*
+# Sedape System 🍜
+*Created as part of the 42 curriculum by traomeli.*
 
-# Sedape (Lockscreen Security Tool)
+## What is this?
 
-## Description
+**Sedape** is a security awareness tool built for the 42 school community.
 
-**Sedape** is a Python-based security education tool developed at 42.
-The goal of this project is to simulate a system "lock" by displaying a full-screen warning image, commonly known in the 42 community as a "croissantage" (or here, a "sedape").
-It serves as a humorous but effective reminder for students to lock their sessions when leaving their workstations.
+If you leave your workstation unlocked and walk away, someone might **sedape** you — your screen gets taken over with a full-screen warning image. To get your PC back, you need to find the person who did it and ask for the unlock code.
 
-The script captures keyboard and mouse events to prevent easy bypass, requiring a specific secret key combination to release the screen.
-
-## Instructions
-
-### Prerequisites
-
-Since the script uses the Python Imaging Library (PIL), you need to install `Pillow` locally (no sudo required):
-
-```bash
-pip3 install --user Pillow
-```
-
-**Important:** Make sure that the image file (`sedape.jpg` by default) is located in the same directory as the `croissant_lock.py` script. If you use another path, modify the `IMAGE_PATH` variable in the script to use a relative path or a correct absolute path.
-
-### Installation & Deployment
-
-To deploy the tool quickly on a workstation, you can use the following one-liner:
-
-```bash
-git clone https://github.com/Nary14/croissantage42.git && cd croissantage42 && python3 croissant_lock.py
-```
-
-### Configuration
-
-You should go at this link and tape BbobotaB_1242 to unlock your pc:
-
-```link
-https://nary14.pythonanywhere.com/
-```
-
-## Usage
-
-Once installed, simply run the script:
-
-```bash
-python3 croissant_lock.py
-```
-
-The lockscreen will immediately activate:
-- A full-screen warning image will be displayed
-- All keyboard and mouse inputs will be captured
-- The system will remain locked until the correct key combination is entered
-- Press the configured `SECRET_KEY` to unlock and return to your session
-
-## Features
-
-- **Full-screen Display**: Blocks the entire screen with a warning image
-- **Input Interception**: Captures and prevents keyboard and mouse events
-- **Customizable Unlock Key**: Easy configuration of the secret key combination
-- **Lightweight**: Minimal resource usage
-- **Educational Purpose**: Teaches security awareness and session management
-
-## Security Notes
-
-**Important**: This tool is designed for educational purposes only. It is not a replacement for proper system-level locking mechanisms (like `xlock` or your desktop environment's native lock feature).
-
-For production security:
-- Use your operating system's built-in lock screen
-- Enable automatic screen lock after idle time
-- Consider using encrypted workstations with proper authentication
- 
-## Contributing
-
-This project is part of the 42 curriculum and is open for improvements and modifications.
-
-## License
-
-This project is created for educational purposes at 42.
+It sounds like a prank. It is. But it also teaches you to **always lock your screen**.
 
 ---
 
-**Stay secure and remember to lock your screen!**
+## How it works
 
+```
+croisant_lock.py  ──POST──▶  /api/request_lock     (registers the lock, gets a token)
+                  ◀──JSON──  { "token": "a3f9bc12" }
+                  ──GET───▶  /gen_image/<token>      (downloads image with QR code)
+                  ──poll──▶  /api/status/<token>     (loops every 2s waiting for unlock)
+
+Victim scans QR   ──GET───▶  /unlock/<token>         (awareness page)
+                  ──POST──▶  enters name + code       (unlocks the PC)
+                  ◀──────── script detects status=1, releases screen
+```
+
+---
+
+## If you got sedaped
+
+Your screen is now locked fullscreen. Here is what to do:
+
+1. **Grab your phone** and scan the QR code displayed on your screen
+2. You will land on a webpage — read it, it will explain why this happened
+3. Scroll down and click **UNLOCK**
+4. Enter the **name** of the person who sedaped you and their **unlock code**
+5. If you don't know who did it — look around, they are probably watching 😄
+6. Once the correct name and code are entered, your screen unlocks automatically
+
+> **Emergency exit (for testing only):** press **F8** ten times in a row
+
+---
+
+## If you want to sedape someone
+
+### Step 1 — Create your account
+
+Go to **https://nary14.pythonanywhere.com/signup** and create an account.
+
+- Pick your role: **TUTOR**, **STAFF** (restricted to 3 people), or **RANDOM GUY AT 42**
+- Set your display name — this is what appears on the victim's screen
+- Set your unlock code — the victim will need this to unlock their PC
+
+### Step 2 — Get your command
+
+Log in to your dashboard at **https://nary14.pythonanywhere.com**
+
+You will see your personalized one-liner command ready to copy:
+
+```bash
+pip3 install --user Pillow qrcode && curl -s https://nary14.pythonanywhere.com/download/<your_username> -o /tmp/s.py && python3 /tmp/s.py
+```
+
+### Step 3 — Run it on the target machine
+
+Wait for the person to leave their PC unlocked. Open a terminal and paste the command.
+
+What happens next:
+- Pillow and qrcode get installed silently
+- The script downloads itself pre-configured with your account
+- It contacts the server, registers a new lock session, and gets a unique token
+- It downloads a personalized image with your name and a QR code
+- The screen goes fullscreen and captures all keyboard input
+
+The victim's PC now shows your sedape screen. Your dashboard will show the new entry in real time.
+
+### Step 4 — Wait
+
+Once the victim scans the QR, reads the awareness page, and enters your name and unlock code correctly — their screen unlocks automatically. You will see the status change to **LIBÉRÉ** on your dashboard.
+
+---
+
+## Dashboard
+
+Everything is managed from **https://nary14.pythonanywhere.com**
+
+| Section | What it does |
+|---|---|
+| Profile card | Shows your username, unlock code, and active lock count |
+| Stats | Total sedapes, blocked vs unlocked |
+| Command | Your one-liner ready to copy |
+| Script download | Direct download of your pre-configured script |
+| PC list | All your lock sessions with token, status, and timestamp |
+| Preview | Live preview of what your sedape screen looks like |
+| Settings | Change your display name and unlock code |
+
+---
+
+## Features
+
+- **Multi-user** — every person has their own account and isolated lock sessions
+- **Unique tokens** — each sedape generates a separate token, no conflicts between victims
+- **Dynamic image** — generated on the fly with your name and a unique QR code
+- **Awareness page** — victim reads a proper explanation before they can unlock
+- **Real-time dashboard** — track all your locked PCs with live status updates
+- **Pre-configured script** — downloads and runs with your account already embedded
+- **Fullscreen + keyboard capture** — prevents easy bypass
+
+---
+
+## Security & Ethics
+
+> This project is designed **for educational purposes only** within the 42 school culture.
+
+- Only use this on 42 school machines, within the community
+- The sedape is a friendly reminder, not a malicious attack
+- Passwords are hashed, tokens are randomly generated, no sensitive data is stored
+- The awareness page explains why screen locking matters
+
+For real system-level locking: **Super+L** on Linux, **Win+L** on Windows, **Cmd+Ctrl+Q** on Mac.
+
+---
+
+**🔒 Lock your screen. Always. Even for 30 seconds.**
