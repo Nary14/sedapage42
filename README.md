@@ -48,8 +48,6 @@ Your screen is now locked fullscreen. Here is what to do:
 5. If you don't know who did it — look around, they are probably watching 😄
 6. Once the correct name and code are entered, your screen unlocks automatically
 
-> **Emergency exit (for testing only):** press **F8** ten times in a row
-
 ---
 
 ## If you want to sedape someone
